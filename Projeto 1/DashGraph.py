@@ -1,11 +1,9 @@
 import io
 import base64
-import math
 import dash
 from dash import dcc, html
 import matplotlib
 import matplotlib.pyplot as plt
-import numpy as np
 from pylab import arange
 
 matplotlib.use('Agg')
