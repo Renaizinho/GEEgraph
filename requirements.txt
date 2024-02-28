@@ -1,5 +1,4 @@
 dash==2.15.0
-base64
 matplotlib
 pylab
 gunicorn
