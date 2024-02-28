@@ -12,6 +12,7 @@ pontos = []
 mensagens = []
 
 app = dash.Dash(__name__)
+server = app.server
 
 form_style = {
     'border': '2px solid #2E8B57',
