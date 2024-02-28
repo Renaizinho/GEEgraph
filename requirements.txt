@@ -1,5 +1,4 @@
 dash==2.15.0
-io
 base64
 matplotlib
 pylab
