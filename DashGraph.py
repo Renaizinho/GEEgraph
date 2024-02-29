@@ -75,7 +75,6 @@ app.layout = html.Div(style={'background-color': '#E6E6FA'}, children=[
     [dash.dependencies.State('input-x', 'value'),
      dash.dependencies.State('input-y', 'value')]
 )
-
 def update_output(n_clicks_button, n_clicks_limpar, x, y):
     ctx = dash.callback_context
     if not ctx.triggered:
@@ -91,7 +90,7 @@ def update_output(n_clicks_button, n_clicks_limpar, x, y):
             Y = float(y)
 
             pontos.append((X, Y))
-            
+
             #CALCULA QUANTO FALTA PARA CHEGAR AS THRESHOLDE GEE
             Thresholders = []
 
@@ -131,22 +130,20 @@ def update_output(n_clicks_button, n_clicks_limpar, x, y):
             Su4 = round(Su4, 2)   
 
             #MENSAGENS NA TELA    
+            mensagem = []
             if Th1 < 0:
-                mensagem = f'Ponto: ({X}, {Y}) \nPara alcançar a Thresholde 1 deve diminuir as emissões de GEE em {round(abs(Th1),2)} ou então deve diminuir a produção de sucata em {round(abs(Su1),2)}'
-                mensagens.append(mensagem)
+                mensagem.append(f'Ponto {len(pontos)}: ({X}, {Y}) \nPara alcançar a Thresholde 1 deve diminuir as emissões de GEE em {round(abs(Th1),2)} ou então deve diminuir a produção de sucata em {round(abs(Su1),2)}')
             
             if Th2 < 0:
-                mensagem = f'Ponto ({X}, {Y}) \nPara alcançar a Thresholde 2 deve diminuir as emissões de GEE em {round(abs(Th2),2)} ou então deve diminuir a produção de sucata em {round(abs(Su2),2)}'
-                mensagens.append(mensagem)
+                mensagem.append(f'Ponto {len(pontos)}: ({X}, {Y}) \nPara alcançar a Thresholde 2 deve diminuir as emissões de GEE em {round(abs(Th2),2)} ou então deve diminuir a produção de sucata em {round(abs(Su2),2)}')
 
             if Th3 < 0:
-                mensagem = f'Ponto ({X}, {Y}) \nPara alcançar a Thresholde 3 deve diminuir as emissões de GEE em {round(abs(Th3),2)} ou então deve diminuir a produção de sucata em {round(abs(Su3),2)}'
-                mensagens.append(mensagem)
+                mensagem.append(f'Ponto {len(pontos)}: ({X}, {Y}) \nPara alcançar a Thresholde 3 deve diminuir as emissões de GEE em {round(abs(Th3),2)} ou então deve diminuir a produção de sucata em {round(abs(Su3),2)}')
             
             if Th4 < 0:
-                mensagem = f'Ponto ({X}, {Y}) \nPara alcançar a Thresholde 4 deve diminuir as emissões de GEE em {round(abs(Th4),2)} ou então deve diminuir a produção de sucata em {round(abs(Su4),2)}'
-                mensagens.append(mensagem)
+                mensagem.append(f'Ponto {len(pontos)}: ({X}, {Y}) \nPara alcançar a Thresholde 4 deve diminuir as emissões de GEE em {round(abs(Th4),2)} ou então deve diminuir a produção de sucata em {round(abs(Su4),2)}')
 
+            mensagens.extend(mensagem)
             mensagens.append('')
 
             return mensagem_html(), graph_html(), x, y
@@ -157,7 +154,6 @@ def update_output(n_clicks_button, n_clicks_limpar, x, y):
                 x, y = 0.0, 0.0
                 return '', [html.Img(src=gerar_grafico([]))], x, y
 
-        #Código de retorno padrão caso nenhum botão seja clicado ou outro caso
     return '', [html.Img(src=gerar_grafico(pontos))], x, y
 
 def gerar_grafico(pontos):
@@ -170,10 +166,10 @@ def gerar_grafico(pontos):
     ax.plot(x, f4(x), color='blue')
 
     # Marcação dos pontos inseridos
-    for ponto in pontos:
+    for i, ponto in enumerate(pontos):
         X, Y = ponto
         ax.plot(X, Y, '*', color='black')
-        ax.annotate((X, Y), xy=(X, Y), xytext=(X + 0.02, Y + 0.02), font='Arial, 12', color='black')
+        ax.annotate(f'Ponto {i+1}', xy=(X, Y), xytext=(X + 0.02, Y + 0.02), font='Arial, 12', color='black')
 
     ax.legend(['Thresholder 1', 'Thresholder 2', 'Thresholder 3', 'Thresholder 4'])
 
@@ -231,5 +227,6 @@ def graph_html():
 
 if __name__ == '__main__':
     app.run_server(debug=True)
+
 
 
