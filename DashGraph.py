@@ -5,10 +5,12 @@ from dash import dcc, html
 import matplotlib
 import matplotlib.pyplot as plt
 from pylab import arange
+import numpy as np  # Importe numpy para gerar cores únicas
 
 matplotlib.use('Agg')
 
 pontos = []
+cores_pontos = []  
 mensagens = []
 
 app = dash.Dash(__name__)
@@ -21,7 +23,7 @@ form_style = {
     'background-color': '#F0F8FF',  # Alice Blue
     'margin': '20px',
     'font-family': 'Arial, sans-serif',
-    'justify-content': 'center' 
+    'justify-content': 'center'
 }
 
 label_style = {
@@ -51,7 +53,8 @@ button_style = {
 app.layout = html.Div(style={'background-color': '#E6E6FA'}, children=[
     html.H1('Proporção de gases GEE e produção de sucata', style={'color': '#2E8B57', 'text-align': 'center'}),
     html.Div(style=form_style, children=[
-        html.P('Favor utilizar PONTO no lugar da VÍRGULA', style={'font-weight': 'bold', 'font-size': '14px', 'text-align': 'center', 'margin-bottom': '10px'}),
+        html.P('Favor utilizar PONTO no lugar da VÍRGULA',
+               style={'font-weight': 'bold', 'font-size': '14px', 'text-align': 'center', 'margin-bottom': '10px'}),
         html.Label('Emissão de Sucata em decimal', style=label_style),
         dcc.Input(id='input-x', type='number', value=0.0, style=input_style),
         html.Label('Emissão de GEE em decimal', style=label_style),
@@ -84,12 +87,15 @@ def update_output(n_clicks_button, n_clicks_limpar, x, y):
 
     if button_id == 'button':
         if n_clicks_button is None:
-            return '', [html.Img(src=gerar_grafico([]))], x, y
+            return '', [html.Img(src=gerar_grafico([], []))], x, y
         else:
             X = float(x)
             Y = float(y)
 
             pontos.append((X, Y))
+            # Gerar uma cor única para este ponto
+            cor = '#%02X%02X%02X' % tuple(np.random.choice(range(256), size=3))
+            cores_pontos.append(cor)
 
             #CALCULA QUANTO FALTA PARA CHEGAR AS THRESHOLDE GEE
             Thresholders = []
@@ -97,71 +103,72 @@ def update_output(n_clicks_button, n_clicks_limpar, x, y):
             Th1 = (2.8 - (2.45*X)) - Y
             Thresholders.insert(0, Th1)
             Th1 = round(Th1, 2)
-            
-            Th2 = (2.0 - (1.75*X)) - Y 
+
+            Th2 = (2.0 - (1.75*X)) - Y
             Thresholders.insert(0, Th2)
             Th2 = round(Th2, 2)
-            
+
             Th3 = (1.2 - (1.05*X)) - Y
             Thresholders.insert(0, Th3)
             Th3 = round(Th3, 2)
-            
+
             Th4 = (0.4 - (0.35*X)) - Y
             Thresholders.insert(0, Th4)
             Th4 = round(Th4, 2)
-            
+
             #CALCULA QUANTO FALTA PARA CHEGAR A THRESHOLDE SUCATA
             Sucata = []
-            
+
             Su1 = (X - ((2.8 - Y) /2.45))
             Sucata.insert(0, Su1)
             Su1 = round(Su1, 2)
-            
+
             Su2 = (X - ((2.0 - Y) /1.75))
             Sucata.insert(0, Su2)
             Su2 = round(Su2, 2)
-            
+
             Su3 = (X - ((1.2 - Y) /1.05))
             Sucata.insert(0, Su3)
             Su3 = round(Su3, 2)
-            
+
             Su4 = (X - ((0.4 - Y) /0.35))
             Sucata.insert(0, Su4)
-            Su4 = round(Su4, 2)   
+            Su4 = round(Su4, 2)
 
-            #MENSAGENS NA TELA    
+            #MENSAGENS NA TELA
             mensagem = []
             if Th1 < 0:
                 mensagem.append(html.Div([
-                html.Strong(f'Ponto {len(pontos)}:'), f'({X}, {Y}) \nPara alcançar a Thresholde 1 deve diminuir as emissões de GEE em {round(abs(Th1),2)} ou então deve diminuir a produção de sucata em {round(abs(Su1),2)}'
-            ]))
+                    html.Strong(f'Ponto {len(pontos)}:'), f'({X}, {Y}) \nPara alcançar a Thresholde 1 deve diminuir as emissões de GEE em {round(abs(Th1),2)} ou então deve diminuir a produção de sucata em {round(abs(Su1),2)}'
+                ], style={'background-color': cor}))  
             if Th2 < 0:
                 mensagem.append(html.Div([
-                html.Strong(f'Ponto {len(pontos)}:'), f'({X}, {Y}) \nPara alcançar a Thresholde 2 deve diminuir as emissões de GEE em {round(abs(Th2),2)} ou então deve diminuir a produção de sucata em {round(abs(Su2),2)}'
-            ]))
+                    html.Strong(f'Ponto {len(pontos)}:'), f'({X}, {Y}) \nPara alcançar a Thresholde 2 deve diminuir as emissões de GEE em {round(abs(Th2),2)} ou então deve diminuir a produção de sucata em {round(abs(Su2),2)}'
+                ], style={'background-color': cor}))  
             if Th3 < 0:
                 mensagem.append(html.Div([
-                html.Strong(f'Ponto {len(pontos)}:'), f'({X}, {Y}) \nPara alcançar a Thresholde 3 deve diminuir as emissões de GEE em {round(abs(Th3),2)} ou então deve diminuir a produção de sucata em {round(abs(Su3),2)}'
-            ]))
+                    html.Strong(f'Ponto {len(pontos)}:'), f'({X}, {Y}) \nPara alcançar a Thresholde 3 deve diminuir as emissões de GEE em {round(abs(Th3),2)} ou então deve diminuir a produção de sucata em {round(abs(Su3),2)}'
+                ], style={'background-color': cor}))  
             if Th4 < 0:
                 mensagem.append(html.Div([
-                html.Strong(f'Ponto {len(pontos)}:'), f'({X}, {Y}) \nPara alcançar a Thresholde 4 deve diminuir as emissões de GEE em {round(abs(Th4),2)} ou então deve diminuir a produção de sucata em {round(abs(Su4),2)}'
-            ]))
+                    html.Strong(f'Ponto {len(pontos)}:'), f'({X}, {Y}) \nPara alcançar a Thresholde 4 deve diminuir as emissões de GEE em {round(abs(Th4),2)} ou então deve diminuir a produção de sucata em {round(abs(Su4),2)}'
+                ], style={'background-color': cor}))  
 
             mensagens.extend(mensagem)
             mensagens.append('')
 
             return mensagem_html(), graph_html(), x, y
     elif button_id == 'limpar':
-            if n_clicks_limpar is not None:
-                pontos.clear()
-                mensagens.clear()
-                x, y = 0.0, 0.0
-                return '', [html.Img(src=gerar_grafico([]))], x, y
+        if n_clicks_limpar is not None:
+            pontos.clear()
+            cores_pontos.clear()  
+            mensagens.clear()
+            x, y = 0.0, 0.0
+            return '', [html.Img(src=gerar_grafico([], []))], x, y
 
-    return '', [html.Img(src=gerar_grafico(pontos))], x, y
+    return '', [html.Img(src=gerar_grafico(pontos, cores_pontos))], x, y
 
-def gerar_grafico(pontos):
+def gerar_grafico(pontos, cores_pontos):
     fig, ax = plt.subplots()
 
     x = arange(0, 1, 0.1)
@@ -173,7 +180,8 @@ def gerar_grafico(pontos):
     # Marcação dos pontos inseridos
     for i, ponto in enumerate(pontos):
         X, Y = ponto
-        ax.plot(X, Y, '*', color='black')
+        cor = cores_pontos[i] if cores_pontos else 'black'
+        ax.plot(X, Y, '*', color=cor)  # Use a cor do ponto correspondente
         ax.annotate(f'{i+1}', xy=(X, Y), xytext=(X + 0.02, Y + 0.02), font='Arial, 12', color='black')
 
     ax.legend(['Thresholder 1', 'Thresholder 2', 'Thresholder 3', 'Thresholder 4'])
@@ -213,10 +221,10 @@ def mensagem_html():
                     'font-size': '16px',
                     'padding': '10px',
                     'margin-bottom': '5px',
-                    'background-color': '#F0F8FF',  # Alice Blue
+                    'background-color': cor,  # Alice Blue
                     'box-shadow': '0px 2px 4px rgba(0, 0, 0, 0.1)'
                 }
-            ) for mensagem in mensagens
+            ) for mensagem, cor in zip(mensagens, cores_pontos)
         ],
         style={
             'border': '2px solid #2E8B57',
@@ -227,11 +235,10 @@ def mensagem_html():
 
 def graph_html():
     return [
-        html.Img(src=gerar_grafico(pontos))
+        html.Img(src=gerar_grafico(pontos, cores_pontos))
     ]
 
 if __name__ == '__main__':
     app.run_server(debug=True)
-
 
 
