@@ -132,16 +132,21 @@ def update_output(n_clicks_button, n_clicks_limpar, x, y):
             #MENSAGENS NA TELA    
             mensagem = []
             if Th1 < 0:
-                mensagem.append(f'Ponto {len(pontos)}: ({X}, {Y}) \nPara alcançar a Thresholde 1 deve diminuir as emissões de GEE em {round(abs(Th1),2)} ou então deve diminuir a produção de sucata em {round(abs(Su1),2)}')
-            
+                mensagem.append(html.Div([
+                html.Strong(f'Ponto {len(pontos)}:'), f'({X}, {Y}) \nPara alcançar a Thresholde 1 deve diminuir as emissões de GEE em {round(abs(Th1),2)} ou então deve diminuir a produção de sucata em {round(abs(Su1),2)}'
+            ]))
             if Th2 < 0:
-                mensagem.append(f'Ponto {len(pontos)}: ({X}, {Y}) \nPara alcançar a Thresholde 2 deve diminuir as emissões de GEE em {round(abs(Th2),2)} ou então deve diminuir a produção de sucata em {round(abs(Su2),2)}')
-
+                mensagem.append(html.Div([
+                html.Strong(f'Ponto {len(pontos)}:'), f'({X}, {Y}) \nPara alcançar a Thresholde 2 deve diminuir as emissões de GEE em {round(abs(Th2),2)} ou então deve diminuir a produção de sucata em {round(abs(Su2),2)}'
+            ]))
             if Th3 < 0:
-                mensagem.append(f'Ponto {len(pontos)}: ({X}, {Y}) \nPara alcançar a Thresholde 3 deve diminuir as emissões de GEE em {round(abs(Th3),2)} ou então deve diminuir a produção de sucata em {round(abs(Su3),2)}')
-            
+                mensagem.append(html.Div([
+                html.Strong(f'Ponto {len(pontos)}:'), f'({X}, {Y}) \nPara alcançar a Thresholde 3 deve diminuir as emissões de GEE em {round(abs(Th3),2)} ou então deve diminuir a produção de sucata em {round(abs(Su3),2)}'
+            ]))
             if Th4 < 0:
-                mensagem.append(f'Ponto {len(pontos)}: ({X}, {Y}) \nPara alcançar a Thresholde 4 deve diminuir as emissões de GEE em {round(abs(Th4),2)} ou então deve diminuir a produção de sucata em {round(abs(Su4),2)}')
+                mensagem.append(html.Div([
+                html.Strong(f'Ponto {len(pontos)}:'), f'({X}, {Y}) \nPara alcançar a Thresholde 4 deve diminuir as emissões de GEE em {round(abs(Th4),2)} ou então deve diminuir a produção de sucata em {round(abs(Su4),2)}'
+            ]))
 
             mensagens.extend(mensagem)
             mensagens.append('')
@@ -169,7 +174,7 @@ def gerar_grafico(pontos):
     for i, ponto in enumerate(pontos):
         X, Y = ponto
         ax.plot(X, Y, '*', color='black')
-        ax.annotate(f'Ponto {i+1}', xy=(X, Y), xytext=(X + 0.02, Y + 0.02), font='Arial, 12', color='black')
+        ax.annotate(f'{i+1}', xy=(X, Y), xytext=(X + 0.02, Y + 0.02), font='Arial, 12', color='black')
 
     ax.legend(['Thresholder 1', 'Thresholder 2', 'Thresholder 3', 'Thresholder 4'])
 
