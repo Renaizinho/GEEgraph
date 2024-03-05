@@ -155,7 +155,7 @@ def update_output(n_clicks_button, n_clicks_limpar, x, y):
                 ], style={'background-color': cor}))  
 
             mensagens.extend(mensagem)
-            mensagens.append('')
+            #mensagens.append('')
 
             return mensagem_html(), graph_html(), x, y
     elif button_id == 'limpar':
@@ -213,25 +213,29 @@ def f4(x):
     return 0.4 - (0.35 * x)
 
 def mensagem_html():
-    return html.Div(
-        [
-            html.Div(
-                mensagem,
-                style={
-                    'font-size': '16px',
-                    'padding': '10px',
-                    'margin-bottom': '5px',
-                    'background-color': cor,  # Alice Blue
-                    'box-shadow': '0px 2px 4px rgba(0, 0, 0, 0.1)'
-                }
-            ) for mensagem, cor in zip(mensagens, cores_pontos)
-        ],
-        style={
-            'border': '2px solid #2E8B57',
-            'border-radius': '5px',
-            'padding': '5px'
-        }
-    )
+    if mensagens and cores_pontos:
+        return html.Div(
+            [
+                html.Div(
+                    mensagem,
+                    key=f'mensagem-{i}',  
+                    style={
+                        'font-size': '16px',
+                        'padding': '10px',
+                        'margin-bottom': '5px',
+                        'background-color': cores_pontos[i] if i < len(cores_pontos) else 'white',  # Verifique se i é menor que o comprimento de cores_pontos
+                        'box-shadow': '0px 2px 4px rgba(0, 0, 0, 0.1)'
+                    }
+                ) for i, mensagem in enumerate(mensagens)  # Percorra todas as mensagens
+            ],
+            style={
+                'border': '2px solid #2E8B57',
+                'border-radius': '5px',
+                'padding': '5px'
+            }
+        )
+    else:
+        return html.Div(style={'display': 'none'})
 
 def graph_html():
     return [
