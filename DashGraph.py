@@ -182,7 +182,7 @@ def gerar_grafico(pontos, cores_pontos):
         X, Y = ponto
         cor = cores_pontos[i] if cores_pontos else 'black'
         ax.plot(X, Y, '*', color=cor)  # Use a cor do ponto correspondente
-        ax.annotate(f'{i+1}', xy=(X, Y), xytext=(X + 0.02, Y + 0.02), font='Arial, 12', color='black')
+        ax.annotate(f'{i+1}', xy=(X, Y), xytext=(X + 0.02, Y + 0.02), font='Arial, 12', color='black', weight='bold')
 
     ax.legend(['Thresholder 1', 'Thresholder 2', 'Thresholder 3', 'Thresholder 4'])
 
@@ -213,7 +213,11 @@ def f4(x):
     return 0.4 - (0.35 * x)
 
 def mensagem_html():
-    if mensagens and cores_pontos:
+    if mensagens:
+        # Repetir a última cor de cores_pontos até que tenha o mesmo comprimento que mensagens
+        while len(cores_pontos) < len(mensagens):
+            cores_pontos.append(cores_pontos[-1])
+        
         return html.Div(
             [
                 html.Div(
@@ -223,10 +227,10 @@ def mensagem_html():
                         'font-size': '16px',
                         'padding': '10px',
                         'margin-bottom': '5px',
-                        'background-color': cores_pontos[i] if i < len(cores_pontos) else 'white',  # Verifique se i é menor que o comprimento de cores_pontos
+                        'background-color': cor,
                         'box-shadow': '0px 2px 4px rgba(0, 0, 0, 0.1)'
                     }
-                ) for i, mensagem in enumerate(mensagens)  # Percorra todas as mensagens
+                ) for i, (mensagem, cor) in enumerate(zip(mensagens, cores_pontos))
             ],
             style={
                 'border': '2px solid #2E8B57',
