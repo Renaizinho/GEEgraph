@@ -141,19 +141,19 @@ def update_output(n_clicks_button, n_clicks_limpar, x, y):
             mensagem = []
             if Th1 < 0:
                 mensagem.append(html.Div([
-                    html.Strong(f'Ponto {len(pontos)}:'), f'({X}, {Y}) \nPara alcançar a Thresholde 1 deve diminuir as emissões de GEE em {round(abs(Th1),2)} ou então deve diminuir a produção de sucata em {round(abs(Su1),2)}'
+                    html.Strong(f'Ponto {len(pontos)}:'), f'({X}, {Y}) \nPara alcançar a Thresholde 1 deve diminuir as emissões de GEE em {round(abs(Th1),2)} ou então deve diminuir a quantidade de sucata em {round(abs(Su1),2)}'
                 ], style={'background-color': cor}))  
             if Th2 < 0:
                 mensagem.append(html.Div([
-                    html.Strong(f'Ponto {len(pontos)}:'), f'({X}, {Y}) \nPara alcançar a Thresholde 2 deve diminuir as emissões de GEE em {round(abs(Th2),2)} ou então deve diminuir a produção de sucata em {round(abs(Su2),2)}'
+                    html.Strong(f'Ponto {len(pontos)}:'), f'({X}, {Y}) \nPara alcançar a Thresholde 2 deve diminuir as emissões de GEE em {round(abs(Th2),2)} ou então deve diminuir a quantidade de sucata em {round(abs(Su2),2)}'
                 ], style={'background-color': cor}))  
             if Th3 < 0:
                 mensagem.append(html.Div([
-                    html.Strong(f'Ponto {len(pontos)}:'), f'({X}, {Y}) \nPara alcançar a Thresholde 3 deve diminuir as emissões de GEE em {round(abs(Th3),2)} ou então deve diminuir a produção de sucata em {round(abs(Su3),2)}'
+                    html.Strong(f'Ponto {len(pontos)}:'), f'({X}, {Y}) \nPara alcançar a Thresholde 3 deve diminuir as emissões de GEE em {round(abs(Th3),2)} ou então deve diminuir a quantidade de sucata em {round(abs(Su3),2)}'
                 ], style={'background-color': cor}))  
             if Th4 < 0:
                 mensagem.append(html.Div([
-                    html.Strong(f'Ponto {len(pontos)}:'), f'({X}, {Y}) \nPara alcançar a Thresholde 4 deve diminuir as emissões de GEE em {round(abs(Th4),2)} ou então deve diminuir a produção de sucata em {round(abs(Su4),2)}'
+                    html.Strong(f'Ponto {len(pontos)}:'), f'({X}, {Y}) \nPara alcançar a Thresholde 4 deve diminuir as emissões de GEE em {round(abs(Th4),2)} ou então deve diminuir a quantidade de sucata em {round(abs(Su4),2)}'
                 ], style={'background-color': cor}))  
 
             mensagens.extend(mensagem)
