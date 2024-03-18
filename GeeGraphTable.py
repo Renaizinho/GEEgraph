@@ -229,26 +229,28 @@ def mensagem_html():
     if mensagens:
         while len(cores_mensagens) < len(mensagens):
             cores_mensagens.append(cores_mensagens[-1])
-        df = pd.DataFrame()
-        for i, (mensagem, cor) in enumerate(zip(mensagens, cores_mensagens)):
-            df_temp = pd.DataFrame(mensagem)
-            df = pd.concat([df, df_temp])
+        
+        table_data = []
+        for msg, cor in zip(mensagens, cores_mensagens):
+            msg_dict = {}
+            for key, value in msg.items():
+                if key != 'backgroundColor':
+                    # Descompactando listas de valores e usando apenas o valor correspondente
+                    msg_dict[key] = value[0]  # Aqui estamos assumindo que há apenas um valor na lista
+            table_data.append(msg_dict)
+        
+        style_data_conditional = [
+            {
+                'if': {'row_index': i},
+                'backgroundColor': cor
+            } for i, cor in enumerate(cores_mensagens)
+        ]
 
         return dash_table.DataTable(
             id='table',
-            columns=[{"name": i, "id": i} for i in df.columns],
-            data=df.to_dict('records'),
-            style_data_conditional=[
-                {
-                    'if': {'row_index': 'odd'},
-                    'backgroundColor': 'rgb(248, 248, 248)'
-                },
-                # Estiliza as células da tabela com a cor correspondente ao ponto
-                {
-                    'if': {'filter_query': f'{{Ref.}} = "Ponto {i+1}"'},
-                    'backgroundColor': cor
-                }
-            ],
+            columns=[{"name": i, "id": i} for i in table_data[0].keys()],
+            data=table_data,
+            style_data_conditional=style_data_conditional,
             style_header={
                 'backgroundColor': 'rgb(230, 230, 230)',
                 'fontWeight': 'bold'
@@ -265,5 +267,4 @@ def graph_html():
 
 if __name__ == '__main__':
     app.run_server(debug=True)
-
 
