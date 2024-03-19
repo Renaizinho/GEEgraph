@@ -80,6 +80,7 @@ app.layout = html.Div(style={'background-color': '#E6E6FA'}, children=[
     [dash.dependencies.State('input-x', 'value'),
      dash.dependencies.State('input-y', 'value')]
 )
+
 def update_output(n_clicks_button, n_clicks_limpar, x, y):
     ctx = dash.callback_context
     if not ctx.triggered:
@@ -144,18 +145,12 @@ def update_output(n_clicks_button, n_clicks_limpar, x, y):
 
             #MENSAGENS NA TELA
             mensagem = []
-            data = {'Ref.': [f'Ponto {len(pontos)}'], 'X': [X], 'Y': [Y], 'Nível': ['Thresholde 1'], 'ΔX': [round((Th1),2)], 'ΔY': [round((-Su1),2)]}
-            if Th1 < 0:
-                mensagem.append(data)
-            data = {'Ref.': [f'Ponto {len(pontos)}'], 'X': [X], 'Y': [Y], 'Nível': ['Thresholde 2'], 'ΔX': [round((Th2),2)], 'ΔY': [round((Su2),2)]}
-            if Th2 < 0:
-                mensagem.append(data)
-            data = {'Ref.': [f'Ponto {len(pontos)}'], 'X': [X], 'Y': [Y], 'Nível': ['Thresholde 3'], 'ΔX': [round((Th3),2)], 'ΔY': [round((Su3),2)]}
-            if Th3 < 0:
-                mensagem.append(data)
-            data = {'Ref.': [f'Ponto {len(pontos)}'], 'X': [X], 'Y': [Y], 'Nível': ['Thresholde 4'], 'ΔX': [round((Th4),2)], 'ΔY': [round((Su4),2)]}
-            if Th4 < 0:
-                mensagem.append(data)
+            thresholds = [Th1, Th2, Th3, Th4]
+            for i, th in enumerate(thresholds):
+                if th < 0:
+                    data = {'Ref.': [f'Ponto {len(pontos)}'], 'X': [X], 'Y': [Y], 'Próximo Nível': [f'Thresholde {i + 1}'], 'ΔX': [round(th, 2)], 'ΔY': [round((-Sucata[i]), 2)]}
+                    mensagem.append(data)
+                    break  # Apenas a thresholde mais próxima é adicionada
 
             mensagens.extend(mensagem)
 
@@ -184,16 +179,16 @@ def gerar_grafico(pontos, cores_pontos):
     ultima_cor = None  # Variável para armazenar a última cor utilizada
     for i, ponto in enumerate(pontos):
         X, Y = ponto
-        if i < len(cores_pontos):  # Verifica se há cores suficientes na lista
+        if i < len(cores_pontos):
             cor = cores_pontos[i]
             # Se a cor atual for igual à anterior, passe para a próxima cor na lista
             if cor == ultima_cor:
                 if i + 1 < len(cores_pontos):
                     cor = cores_pontos[i + 1]
             else:
-                ultima_cor = cor  # Atualiza a última cor utilizada
+                ultima_cor = cor  #Atualiza a última cor utilizada
         else:
-            cor = 'black'  # Cor padrão caso não haja cores suficientes
+            cor = 'black'  #Cor padrão caso não haja cores suficientes
         ax.plot(X, Y, '*', color=cor)  
         ax.annotate(f'{i+1}', xy=(X, Y), xytext=(X + 0.02, Y + 0.02), font='Arial, 12', color='black', weight='bold')
 
@@ -235,8 +230,8 @@ def mensagem_html():
             msg_dict = {}
             for key, value in msg.items():
                 if key != 'backgroundColor':
-                    # Descompactando listas de valores e usando apenas o valor correspondente
-                    msg_dict[key] = value[0]  # Aqui estamos assumindo que há apenas um valor na lista
+                    #Descompactando listas de valores e usando apenas o valor correspondente
+                    msg_dict[key] = value[0]  #Aqui estamos assumindo que há apenas um valor na lista
             table_data.append(msg_dict)
         
         style_data_conditional = [
