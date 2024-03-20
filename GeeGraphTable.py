@@ -84,9 +84,9 @@ app.layout = html.Div(style={'background-color': '#E6E6FA'}, children=[
 
 def update_output(n_clicks_button, n_clicks_limpar, x, y):
     def generate_color():
-        r = np.random.randint(51, 201)  # Componente R (red)
-        g = np.random.randint(51, 201)  # Componente G (green)
-        b = np.random.randint(51, 201)  # Componente B (blue)
+        r = np.random.randint(51, 201)  
+        g = np.random.randint(51, 201)  
+        b = np.random.randint(51, 201)  
         return '#%02X%02X%02X' % (r, g, b)
     
     ctx = dash.callback_context
@@ -103,7 +103,7 @@ def update_output(n_clicks_button, n_clicks_limpar, x, y):
             Y = float(y)
 
             pontos.append((X, Y))
-            #Gera uma cor única para o ponto
+            #Gera uma cor única para o ponto (Estamos utilizando uma função para limitar agora)
             #cor = '#%02X%02X%02X' % tuple(np.random.choice(range(256), size=3))
             cor = generate_color()
             cores_pontos.append(cor)
