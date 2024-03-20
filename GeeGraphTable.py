@@ -84,9 +84,9 @@ app.layout = html.Div(style={'background-color': '#E6E6FA'}, children=[
 
 def update_output(n_clicks_button, n_clicks_limpar, x, y):
     def generate_color():
-        r = np.random.randint(51, 201)  
-        g = np.random.randint(51, 201)  
-        b = np.random.randint(51, 201)  
+        r = np.random.randint(100, 201)  
+        g = np.random.randint(100, 201)  
+        b = np.random.randint(100, 201)  
         return '#%02X%02X%02X' % (r, g, b)
     
     ctx = dash.callback_context
