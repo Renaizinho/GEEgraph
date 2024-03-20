@@ -57,7 +57,7 @@ app.layout = html.Div(style={'background-color': '#E6E6FA'}, children=[
     html.Div(style=form_style, children=[
         html.P('Favor utilizar PONTO no lugar da VÍRGULA',
                style={'font-weight': 'bold', 'font-size': '14px', 'text-align': 'center', 'margin-bottom': '10px'}),
-        html.Label('Emissão de Sucata em decimal', style=label_style),
+        html.Label('Proporção de Sucata em decimal', style=label_style),
         dcc.Input(id='input-x', type='number', value=0.0, style=input_style),
         html.Label('Emissão de GEE em decimal', style=label_style),
         dcc.Input(id='input-y', type='number', value=0.0, style=input_style),
@@ -81,7 +81,14 @@ app.layout = html.Div(style={'background-color': '#E6E6FA'}, children=[
      dash.dependencies.State('input-y', 'value')]
 )
 
+
 def update_output(n_clicks_button, n_clicks_limpar, x, y):
+    def generate_color():
+        r = np.random.randint(51, 201)  # Componente R (red)
+        g = np.random.randint(51, 201)  # Componente G (green)
+        b = np.random.randint(51, 201)  # Componente B (blue)
+        return '#%02X%02X%02X' % (r, g, b)
+    
     ctx = dash.callback_context
     if not ctx.triggered:
         button_id = None
@@ -97,7 +104,8 @@ def update_output(n_clicks_button, n_clicks_limpar, x, y):
 
             pontos.append((X, Y))
             #Gera uma cor única para o ponto
-            cor = '#%02X%02X%02X' % tuple(np.random.choice(range(256), size=3))
+            #cor = '#%02X%02X%02X' % tuple(np.random.choice(range(256), size=3))
+            cor = generate_color()
             cores_pontos.append(cor)
             cores_mensagens.append(cor)
 
