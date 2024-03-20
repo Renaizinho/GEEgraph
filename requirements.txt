@@ -1,3 +1,4 @@
 dash==2.15.0
 matplotlib
 gunicorn
+pandas
