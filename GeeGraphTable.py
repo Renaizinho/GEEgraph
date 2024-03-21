@@ -53,7 +53,7 @@ button_style = {
 }
 
 app.layout = html.Div(style={'background-color': '#E6E6FA'}, children=[
-    html.H1('Proporção de gases GEE e produção de sucata', style={'color': '#2E8B57', 'text-align': 'center'}),
+    html.H1('Proporção de gases GEE e de sucata', style={'color': '#2E8B57', 'text-align': 'center'}),
     html.Div(style=form_style, children=[
         html.P('Favor utilizar PONTO no lugar da VÍRGULA',
                style={'font-weight': 'bold', 'font-size': '14px', 'text-align': 'center', 'margin-bottom': '10px'}),
