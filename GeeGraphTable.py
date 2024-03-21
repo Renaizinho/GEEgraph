@@ -81,7 +81,6 @@ app.layout = html.Div(style={'background-color': '#E6E6FA'}, children=[
      dash.dependencies.State('input-y', 'value')]
 )
 
-
 def update_output(n_clicks_button, n_clicks_limpar, x, y):
     def generate_color():
         r = np.random.randint(100, 201)  
@@ -103,66 +102,60 @@ def update_output(n_clicks_button, n_clicks_limpar, x, y):
             Y = float(y)
 
             pontos.append((X, Y))
-            #Gera uma cor única para o ponto (Estamos utilizando uma função para limitar agora)
-            #cor = '#%02X%02X%02X' % tuple(np.random.choice(range(256), size=3))
             cor = generate_color()
             cores_pontos.append(cor)
             cores_mensagens.append(cor)
 
-            #CALCULA QUANTO FALTA PARA CHEGAR AS THRESHOLDE GEE
+            # CALCULA QUANTO FALTA PARA CHEGAR A THRESHOLDE GEE (Y)
             Thresholders = []
 
             Th1 = (2.8 - (2.45*X)) - Y
-            Thresholders.insert(0, Th1)
             Th1 = round(Th1, 2)
 
             Th2 = (2.0 - (1.75*X)) - Y
-            Thresholders.insert(0, Th2)
             Th2 = round(Th2, 2)
 
             Th3 = (1.2 - (1.05*X)) - Y
-            Thresholders.insert(0, Th3)
             Th3 = round(Th3, 2)
 
             Th4 = (0.4 - (0.35*X)) - Y
-            Thresholders.insert(0, Th4)
             Th4 = round(Th4, 2)
 
-            #CALCULA QUANTO FALTA PARA CHEGAR A THRESHOLDE SUCATA
+            # CALCULA QUANTO FALTA PARA CHEGAR A THRESHOLDE SUCATA (X)
             Sucata = []
 
-            Su1 = (X - ((2.8 - Y) /2.45))
-            Sucata.insert(0, Su1)
-            Su1 = round(Su1, 2)
-            Su1 = -1 * Su1
+            Su1 = X - ((2.8 - Y) / 2.45)
+            Sucata.append(round(Su1, 2))
 
-            Su2 = (X - ((2.0 - Y) /1.75))
-            Sucata.insert(0, Su2)
-            Su2 = round(Su2, 2)
-            Su2 = -1 * Su2
+            Su2 = X - ((2.0 - Y) / 1.75)
+            Sucata.append(round(Su2, 2))
 
-            Su3 = (X - ((1.2 - Y) /1.05))
-            Sucata.insert(0, Su3)
-            Su3 = round(Su3, 2)
-            Su3 = -1 * Su3
+            Su3 = X - ((1.2 - Y) / 1.05)
+            Sucata.append(round(Su3, 2))
 
-            Su4 = (X - ((0.4 - Y) /0.35))
-            Sucata.insert(0, Su4)
-            Su4 = round(Su4, 2)
-            Su4 = -1 * Su4
+            Su4 = X - ((0.4 - Y) / 0.35)
+            Sucata.append(round(Su4, 2))
 
-            #MENSAGENS NA TELA
+            # MENSAGENS NA TELA
             mensagem = []
             thresholds = [Th1, Th2, Th3, Th4]
             for i, th in enumerate(thresholds):
                 if th < 0:
-                    data = {'Ref.': [f'Ponto {len(pontos)}'], 'X': [X], 'Y': [Y], 'Próximo Nível': [f'Thresholde {i + 1}'], 'ΔX': [round(th, 2)], 'ΔY': [round((-Sucata[i]), 2)]}
+                    data = {
+                        'Ref.': [f'Ponto {len(pontos)}'],
+                        'X': [X],
+                        'Y': [Y],
+                        'Próximo Nível': [f'Thresholde {i + 1}'],
+                        'ΔX': [abs(Sucata[i])],
+                        'ΔY': [abs(round(th, 2))]  
+                    }
                     mensagem.append(data)
-                    break  # Apenas a thresholde mais próxima é adicionada
+                    break  #Adiciona apenas a threshold mais próxima
 
             mensagens.extend(mensagem)
 
             return mensagem_html(), graph_html(), x, y
+
     elif button_id == 'limpar':
         if n_clicks_limpar is not None:
             pontos.clear()
@@ -202,9 +195,9 @@ def gerar_grafico(pontos, cores_pontos):
 
     ax.legend(['Thresholder 1', 'Thresholder 2', 'Thresholder 3', 'Thresholder 4'])
 
-    ax.set_title('Crude Steel GHG\nEmissions Intensity')
-    ax.set_xlabel('Scrape share of metallica input (proportion)')
-    ax.set_ylabel('GHG emissions intensity of crude steel')
+    ax.set_title('')
+    ax.set_xlabel('Scrape share of metallica input (proportion) - X')
+    ax.set_ylabel('GHG emissions intensity of crude steel - Y')
     ax.grid()
 
     buffer = io.BytesIO()
