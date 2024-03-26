@@ -25,7 +25,8 @@ form_style = {
     'background-color': '#F0F8FF',  # Alice Blue
     'margin': '20px',
     'font-family': 'Arial, sans-serif',
-    'justify-content': 'center'
+    'justify-content': 'center',
+    'position': 'relative'  # Adicionando posição relativa para posicionamento absoluto da logo
 }
 
 label_style = {
@@ -55,6 +56,7 @@ button_style = {
 app.layout = html.Div(style={'background-color': '#E6E6FA'}, children=[
     html.H1('ResponsibleSteel - Requisito 10.6.3c (v. 2.0)', style={'color': '#2E8B57', 'text-align': 'center'}),
     html.Div(style=form_style, children=[
+        html.Img(src="/assets/logo.png", style={'position': 'absolute', 'top': '20px', 'right': '20px', 'width': '100px'}),
         html.P('Favor utilizar PONTO no lugar da VÍRGULA',
                style={'font-weight': 'bold', 'font-size': '14px', 'text-align': 'center', 'margin-bottom': '10px'}),
         html.Label('Proporção de Sucata em decimal', style=label_style),
@@ -197,7 +199,7 @@ def gerar_grafico(pontos, cores_pontos):
 
     ax.set_title('')
     ax.set_xlabel('Scrape share of metallica input (proportion) - X')
-    ax.set_ylabel('GHG emissions intensity of crude steel - Y\n(t CO₂/tonne crude steel)')
+    ax.set_ylabel('GHG emissions intensity of crude steel - Y\n(t CO₂ e/tonne crude steel)')
     ax.grid()
 
     buffer = io.BytesIO()
